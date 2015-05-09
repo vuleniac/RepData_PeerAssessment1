@@ -3,7 +3,7 @@
 
 ## Loading and preprocessing the data
 ### 1. Getting the data:
-    In order to guarantee the source data is consistent with the analysis performed in this analysis, the existance of the source dataset is checked as well as the compressed file used as a mean of delivery. If the source dataset is not found, it is downloaded from the assaigment webpage and decompressed.
+In order to guarantee the source data is consistent with the analysis performed in this analysis, the existance of the source dataset is checked as well as the compressed file used as a mean of delivery. If the source dataset is not found, it is downloaded from the assaigment webpage and decompressed.
     
 
 ```r
@@ -19,7 +19,7 @@ if(!file.exists("./activity.csv")){
     }
 ```
 
-    There are three packages necessary to process the dataset: Lubridate, plyr and ggplot2. The following code checks that the packages are installed and loaded:
+There are three packages necessary to process the dataset: Lubridate, plyr and ggplot2. The following code checks that the packages are installed and loaded:
 
 
 ```r
@@ -46,30 +46,9 @@ for(i in required){
     }
 ```
 
-```
-## Warning: package 'lubridate' was built under R version 3.1.3
-```
-
-```
-## Warning: package 'plyr' was built under R version 3.1.3
-```
-
-```
-## 
-## Attaching package: 'plyr'
-## 
-## The following object is masked from 'package:lubridate':
-## 
-##     here
-```
-
-```
-## Warning: package 'ggplot2' was built under R version 3.1.3
-```
-
 ### 2. Preprocessing the data:
 
-    For ease of calculations, the date and interval variables are combined to produce a time variable POSIXct by using lubridate:
+For ease of calculations, the date and interval variables are combined to produce a time variable POSIXct by using lubridate:
     
 
 ```r
@@ -80,11 +59,11 @@ steps$DateTime <- ymd_hms(paste( steps$date, steps$time, "00", sep=" "))
 
 ## What is mean total number of steps taken per day?
 
-    Using plyr to get the sum of steps per day (sum function ignores NA's):
+Using plyr to get the sum of steps per day (sum function ignores NA's):
 
 
 ```r
-tot_steps <- ddply(steps, "date", summarize,
+tot_steps <- ddply(steps[steps$steps!="NA",], "date", summarize,
                 sum = sum(steps, na.rm=T))
 
 median <- median(tot_steps$sum)
@@ -101,11 +80,11 @@ qplot(sum, data=tot_steps, binwidth=500)
 
 ### 2. Mean and Median:
 
-    The individual tracked in this dataset, takes on average 9354.23 steps per day. This distribution has a median value of 10395
+The individual tracked in this dataset, takes on average 10566.8 steps per day. This distribution has a median value of 10682.5
 
 ## What is the average daily activity pattern?
 
-    Using plyr to summarize the average steps per time interval:
+Using plyr to summarize the average steps per time interval:
 
 ```r
 ave_steps <- ddply(steps, "interval", summarize,
@@ -127,7 +106,7 @@ max_interval <- ave_steps[ave_steps$ave==max(ave_steps$ave),"interval"]
 max_interval <- paste(floor(max_interval/100),round(((max_interval/100)-floor(max_interval/100))*100,0), sep=":")
 ```
 
-    The individual being tracked in this datataset takes the largest amount of steps on average at 8:35. It is possible that the individual commutes using a bike or walking. It is also possible that he/she exercises as part of a morning routine.
+The individual being tracked in this datataset takes the largest amount of steps on average at 8:35. It is possible that the individual commutes using a bike or walking. It is also possible that he/she exercises as part of a morning routine.
 
 ## Imputing missing values
 
@@ -138,11 +117,11 @@ max_interval <- paste(floor(max_interval/100),round(((max_interval/100)-floor(ma
 steps$nas <- is.na(steps$steps)
 tot_na <- sum(steps$nas)
 ```
-    The total number of NAs for the steps variable is 2304
+The total number of NAs for the steps variable is 2304
     
 ### 2. Filling out the NAs:
 
-    The idea here is to fill out the NA's with the average number of steps for the corresponding time interval as observed in the global dataset:
+The idea here is to fill out the NA's with the average number of steps for the corresponding time interval as observed in the global dataset:
 
 ```r
 new_steps <- steps
@@ -157,7 +136,7 @@ new_steps$nas <- is.na(new_steps$steps)
 
 ### 3. The New Dataset:
 
-    The OLD dataset
+The OLD dataset
 
 ```r
 head(steps, 10)
@@ -177,7 +156,7 @@ head(steps, 10)
 ## 10    NA 2012-10-01       45 0:45 2012-10-01 00:45:00 TRUE
 ```
 
-    The NEW dataset
+The NEW dataset
 
 ```r
 head(new_steps, 10)
@@ -211,13 +190,13 @@ qplot(sum, data=tot_new_steps, binwidth=500)
 
 ![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 
 
-    The new dataset has a value for the mean steps taken in a day of 10766.18 and a median of 10766.13, which differs from the original values (mean:9354.23, median:10395) by 1411.95 and 371.13 respectively.
+The new dataset has a value for the mean steps taken in a day of 10766.18 and a median of 10766.13, which differs from the original values (mean:10566.81, median:10682.5) by 199.37 and 83.63 steps respectively.
     
 ## Are there differences in activity patterns between weekdays and weekends?
 
 ### 1. A new factor variable:
 
-    Creating a factor variable with 2 levels: "weekday" & "weekend":
+Creating a factor variable with 2 levels: "weekday" & "weekend":
 
 ```r
 new_steps$day <- wday(new_steps$DateTime,label=F)
