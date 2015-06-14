@@ -68,7 +68,7 @@ steps$DateTime <- ymd_hms(paste( steps$date, steps$time, "00", sep=" "))
 Using plyr to get the sum of steps per day (sum function ignores NA's):
 
 ```{r, echo=TRUE}
-tot_steps <- ddply(steps[steps$steps!="NA",], "date", summarize,
+tot_steps <- ddply(steps, "date", summarize,
                 sum = sum(steps, na.rm=T))
 
 median <- median(tot_steps$sum)

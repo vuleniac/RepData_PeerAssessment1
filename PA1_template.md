@@ -63,7 +63,7 @@ Using plyr to get the sum of steps per day (sum function ignores NA's):
 
 
 ```r
-tot_steps <- ddply(steps[steps$steps!="NA",], "date", summarize,
+tot_steps <- ddply(steps, "date", summarize,
                 sum = sum(steps, na.rm=T))
 
 median <- median(tot_steps$sum)
@@ -80,7 +80,7 @@ qplot(sum, data=tot_steps, binwidth=500)
 
 ### 2. Mean and Median:
 
-The individual tracked in this dataset, takes on average 10566.8 steps per day. This distribution has a median value of 10682.5
+The individual tracked in this dataset, takes on average 9354.2 steps per day. This distribution has a median value of 10395
 
 ## What is the average daily activity pattern?
 
@@ -190,7 +190,7 @@ qplot(sum, data=tot_new_steps, binwidth=500)
 
 ![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 
 
-The new dataset has a value for the mean steps taken in a day of 10766.18 and a median of 10766.13, which differs from the original values (mean:10566.81, median:10682.5) by 199.37 and 83.63 steps respectively.
+The new dataset has a value for the mean steps taken in a day of 10766.18 and a median of 10766.13, which differs from the original values (mean:9354.23, median:10395) by 1411.95 and 371.13 steps respectively.
     
 ## Are there differences in activity patterns between weekdays and weekends?
 
